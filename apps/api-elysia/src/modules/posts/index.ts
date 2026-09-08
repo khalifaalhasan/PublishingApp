@@ -70,7 +70,7 @@ export const postsModule = withAuth(new Elysia({ prefix: "/api/posts" }))
       };
     },
     {
-      auth: true, // 👈 Require login (any authenticated user)
+      auth: "ADMIN",
       body: t.Omit(createPostSchema, [
         "id",
         "authorId",
@@ -113,7 +113,7 @@ export const postsModule = withAuth(new Elysia({ prefix: "/api/posts" }))
       };
     },
     {
-      auth: true, // 👈 Require login + ownership check in handler
+      auth: "ADMIN",
       params: t.Object({
         id: t.String({ format: "uuid" }),
       }),
@@ -153,7 +153,7 @@ export const postsModule = withAuth(new Elysia({ prefix: "/api/posts" }))
       };
     },
     {
-      auth: true, // 👈 Require login + ownership check in handler
+      auth: "ADMIN",
       params: t.Object({
         id: t.String({ format: "uuid" }),
       }),
