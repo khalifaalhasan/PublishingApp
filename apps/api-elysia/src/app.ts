@@ -4,6 +4,7 @@ import { swagger } from "@elysiajs/swagger";
 import { authModule } from "@modules/auth";
 import { healthModule } from "@modules/health";
 import { postsModule } from "@modules/posts";
+import { submissionsModule } from "@modules/submissions";
 import { Elysia } from "elysia";
 import { appLogger } from "./common/logger";
 import {
@@ -112,7 +113,8 @@ export const createApp = () => {
 
     // Feature modules
     .use(healthModule)
-    .use(postsModule);
+    .use(postsModule)
+    .use(submissionsModule);
 
   if (env.ENABLE_AUTH) {
     app.use(authRateLimit);
