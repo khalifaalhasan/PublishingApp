@@ -1,0 +1,10 @@
+{
+  "name": "@web-si/tunnel",
+  "private": true,
+  "scripts": {
+    "dev": "dotenv -e ../../.env -- node scripts/tunnel.mjs"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.4.2"
+  }
+}
