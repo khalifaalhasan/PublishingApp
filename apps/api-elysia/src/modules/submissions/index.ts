@@ -1,10 +1,10 @@
 import type { SubmissionStatus, SubmissionType } from "@common/db/schema";
 import { withAuth } from "@common/middleware/auth-guard";
 import { Elysia } from "elysia";
-import * as service from "./service";
 import * as schemas from "./schemas";
+import * as service from "./service";
 
-export const submissionsModule = new Elysia({ prefix: "/submissions" })
+export const submissionsModule = new Elysia({ prefix: "/api/submissions" })
   .use(withAuth)
 
   // GET /submissions - User gets own, Admin gets all
@@ -29,7 +29,7 @@ export const submissionsModule = new Elysia({ prefix: "/submissions" })
       return result;
     },
     {
-      auth: ["ADMIN", "USER"],
+      auth: ["ADMIN"],
       query: schemas.getSubmissionsQuerySchema,
       detail: {
         tags: ["Submissions"],
@@ -62,6 +62,7 @@ export const submissionsModule = new Elysia({ prefix: "/submissions" })
             message: "You can only view your own submissions",
           };
         }
+
         throw error;
       }
     },
