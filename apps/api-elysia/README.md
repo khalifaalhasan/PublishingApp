@@ -116,9 +116,9 @@ docker compose up
 
 Your app is now running:
 
-- **API:** http://localhost:3000
-- **Docs:** http://localhost:3000/docs
-- **Health:** http://localhost:3000/health
+- **API:** http://localhost:5000
+- **Docs:** http://localhost:5000/docs
+- **Health:** http://localhost:5000/health
 
 ## Project Structure
 
@@ -151,7 +151,7 @@ Key environment variables (see `.env.example` for full list):
 | ---------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------- |
 | `NODE_ENV`                   | Runtime environment (`development`, `production`, `test`)     | No (default: `development`)                                 |
 | `HOST`                       | Server bind address                                           | No (default: `0.0.0.0`)                                     |
-| `PORT`                       | Server port                                                   | No (default: `3000`)                                        |
+| `PORT`                       | Server port                                                   | No (default: `5000`)                                        |
 | `DATABASE_URL`               | PostgreSQL connection string                                  | Yes                                                         |
 | `BETTER_AUTH_SECRET`         | Auth secret key (generate: `openssl rand -base64 32`)         | Yes                                                         |
 | `BETTER_AUTH_URL`            | Base URL for auth callbacks                                   | Yes                                                         |
@@ -159,7 +159,7 @@ Key environment variables (see `.env.example` for full list):
 | `REQUIRE_EMAIL_VERIFICATION` | Require email verification before login                       | No (default: `false`)                                       |
 | `ENABLE_RATE_LIMITER`        | Enable/disable rate limiting                                  | No (default: `true`)                                        |
 | `LOG_LEVEL`                  | Log level: `fatal`, `error`, `warn`, `info`, `debug`, `trace` | No (default: `info`)                                        |
-| `CORS_ORIGIN`                | Allowed origins (comma-separated)                             | No (default: `http://localhost:3000,http://localhost:5173`) |
+| `CORS_ORIGIN`                | Allowed origins (comma-separated)                             | No (default: `http://localhost:5000,http://localhost:5173`) |
 
 > `NODE_ENV` is used to adjust logging visual, testing, and runtime behavior.
 

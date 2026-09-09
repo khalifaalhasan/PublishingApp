@@ -89,7 +89,7 @@ async function seed() {
           {
             type: "ESSAY",
             content:
-              "# Panduan Upload Esai\n\n1. Tema bebas dan tidak SARA.\n2. Jumlah kata antara 1000 - 3000 kata.",
+              "# Panduan Upload Esai\n\n1. Tema bebas dan tidak SARA.\n2. Jumlah kata antara 1000 - 5000 kata.",
             updatedById: admin.id,
           },
           {

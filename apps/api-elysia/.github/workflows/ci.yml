@@ -55,7 +55,7 @@ jobs:
           ENABLE_AUTH: "true"
           NODE_ENV: test
           BETTER_AUTH_SECRET: test-secret-for-ci-32-characters-long!!!
-          BETTER_AUTH_URL: http://localhost:3000
+          BETTER_AUTH_URL: http://localhost:5000
         run: bun run db:migrate
 
       - name: Run tests
@@ -65,5 +65,5 @@ jobs:
           ENABLE_RATE_LIMITER: "false"
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
           BETTER_AUTH_SECRET: test-secret-for-ci-32-characters-long!!!
-          BETTER_AUTH_URL: http://localhost:3000
+          BETTER_AUTH_URL: http://localhost:5000
         run: bun run test

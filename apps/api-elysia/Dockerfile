@@ -22,10 +22,10 @@ COPY --from=build /app/drizzle ./drizzle
 # Run as non-root user provided by the Bun image
 USER bun
 
-EXPOSE 3000
+EXPOSE 5000
 
 # Application health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD bun -e "fetch('http://localhost:3000/health').then(r => r.ok ? process.exit(0) : process.exit(1))"
+  CMD bun -e "fetch('http://localhost:5000/health').then(r => r.ok ? process.exit(0) : process.exit(1))"
 
 CMD ["bun", "run", "dist/index.js"]
