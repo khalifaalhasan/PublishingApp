@@ -1,6 +1,38 @@
 import type { SubmissionStatus, SubmissionType } from "@common/db/schema";
 import * as repo from "./repository";
 
+export type AuthorBioInput = {
+  penName?: string;
+  bio: string;
+  phone: string;
+  socialLinks?: string;
+};
+
+export type CreateSubmissionInput = {
+  title: string;
+  description: string;
+  type: SubmissionType;
+  isDraft: boolean;
+  fileUrl: string;
+  fileName: string;
+  sellingPoint?: string;
+  coverLetter?: string;
+  authorBio: AuthorBioInput;
+} & (
+  | {
+      type: "BOOK";
+      bookDetail: {
+        genre: string;
+        pageCount: number;
+        language?: string;
+      };
+    }
+  | {
+      type: "ESSAY";
+      essayDetail: { topic: string; wordCount?: number };
+    }
+);
+
 export async function getSubmissions(params: {
   userId?: string;
   status?: SubmissionStatus;
@@ -51,30 +83,9 @@ export async function getSubmissionDetail(
 
 export async function createSubmission(
   userId: string,
-  data: {
-    title: string;
-    description: string;
-    type: SubmissionType;
-    isDraft: boolean;
-    fileUrl: string;
-    fileName: string;
-    bookDetail?: {
-      genre: string;
-      pageCount: number;
-      language?: string;
-      isbn?: string;
-    };
-    essayDetail?: { topic: string; wordCount?: number };
-  },
+  data: CreateSubmissionInput,
 ) {
   const status: SubmissionStatus = data.isDraft ? "DRAFT" : "AWAITING_REVIEW";
-
-  if (data.type === "BOOK" && !data.bookDetail) {
-    throw new Error("Missing required detail for the given submission type");
-  }
-  if (data.type === "ESSAY" && !data.essayDetail) {
-    throw new Error("Missing required detail for the given submission type");
-  }
 
   return await repo.insertSubmission({
     userId,
