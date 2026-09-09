@@ -1,10 +1,23 @@
 import { t } from "elysia";
 
+export const authorBioSchema = t.Object({
+  penName: t.Optional(t.String()),
+  bio: t.String(),
+  phone: t.String(),
+  socialLinks: t.Optional(t.String()),
+});
+
 export const bookDetailSchema = t.Object({
   genre: t.String(),
   pageCount: t.Number(),
   language: t.Optional(t.String()),
   isbn: t.Optional(t.String()),
+});
+
+export const createBookDetailSchema = t.Object({
+  genre: t.String(),
+  pageCount: t.Number(),
+  language: t.Optional(t.String()),
 });
 
 export const essayDetailSchema = t.Object({
@@ -23,16 +36,44 @@ export const submissionIdParamSchema = t.Object({
   id: t.String({ format: "uuid" }),
 });
 
-export const createSubmissionBodySchema = t.Object({
-  title: t.String(),
-  description: t.String(),
-  type: t.Union([t.Literal("BOOK"), t.Literal("ESSAY")]),
-  isDraft: t.Boolean(),
-  fileUrl: t.String(),
-  fileName: t.String(),
-  bookDetail: t.Optional(bookDetailSchema),
-  essayDetail: t.Optional(essayDetailSchema),
-});
+export const createBookSubmissionBodySchema = t.Intersect([
+  t.Object({
+    title: t.String(),
+    description: t.String(),
+    type: t.Literal("BOOK"),
+    isDraft: t.Boolean(),
+    fileUrl: t.String(),
+    fileName: t.String(),
+    sellingPoint: t.Optional(t.String()),
+    coverLetter: t.Optional(t.String()),
+    authorBio: authorBioSchema,
+  }),
+  t.Object({
+    bookDetail: createBookDetailSchema,
+  }),
+]);
+
+export const createEssaySubmissionBodySchema = t.Intersect([
+  t.Object({
+    title: t.String(),
+    description: t.String(),
+    type: t.Literal("ESSAY"),
+    isDraft: t.Boolean(),
+    fileUrl: t.String(),
+    fileName: t.String(),
+    sellingPoint: t.Optional(t.String()),
+    coverLetter: t.Optional(t.String()),
+    authorBio: authorBioSchema,
+  }),
+  t.Object({
+    essayDetail: essayDetailSchema,
+  }),
+]);
+
+export const createSubmissionBodySchema = t.Union([
+  createBookSubmissionBodySchema,
+  createEssaySubmissionBodySchema,
+]);
 
 export const updateDraftBodySchema = t.Object({
   title: t.Optional(t.String()),
