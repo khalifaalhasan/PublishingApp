@@ -33,15 +33,17 @@ export function withAuth<T extends Elysia<any, any, any, any, any, any, any>>(
         let isRequired = true;
         let requiredRoles: Role[] | undefined = undefined;
 
+        // Normalisasi semua input config menjadi uppercase agar aman
         if (typeof config === "boolean") {
           isRequired = config;
         } else if (typeof config === "string") {
-          requiredRoles = [config];
+          requiredRoles = [config.toUpperCase() as Role];
         } else if (Array.isArray(config)) {
-          requiredRoles = config;
+          requiredRoles = config.map((r) => r.toUpperCase() as Role);
         } else if (typeof config === "object" && config !== null) {
           isRequired = config.required !== false;
-          requiredRoles = config.roles;
+          // Gunakan optional chaining dan map untuk array roles
+          requiredRoles = config.roles?.map((r) => r.toUpperCase() as Role);
         }
 
         if (!isRequired && !requiredRoles) return;
@@ -56,9 +58,11 @@ export function withAuth<T extends Elysia<any, any, any, any, any, any, any>>(
               };
             }
 
-            // Role-Based Access Control (RBAC) Check
             if (requiredRoles && requiredRoles.length > 0) {
-              if (!requiredRoles.includes(user.role as Role)) {
+              const currentUserRole = String(user.role)
+                .trim()
+                .toUpperCase() as Role;
+              if (!requiredRoles.includes(currentUserRole)) {
                 set.status = 403;
                 return {
                   error: "Forbidden",
