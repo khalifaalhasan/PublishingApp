@@ -15,6 +15,27 @@
       "when": 1788877594974,
       "tag": "0001_vengeful_risque",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788950400000,
+      "tag": "0002_submission_metadata",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788950500000,
+      "tag": "0003_submission_author_bio_jsonb",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1788972401511,
+      "tag": "0004_sticky_toad",
+      "breakpoints": true
     }
   ]
 }
