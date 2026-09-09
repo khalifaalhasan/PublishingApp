@@ -20,7 +20,7 @@ const EnvSchema = Type.Object({
     },
   ),
   PORT: Type.Number({
-    default: 3000,
+    default: 5000,
   }),
   HOST: Type.String({
     default: "0.0.0.0",
@@ -51,7 +51,7 @@ const EnvSchema = Type.Object({
   ),
   BETTER_AUTH_URL: Type.Optional(
     Type.String({
-      default: "http://localhost:3000",
+      default: "http://localhost:5000",
       description: "Base URL for authentication callbacks",
       pattern: "^https?://.+",
     }),
@@ -75,7 +75,7 @@ const EnvSchema = Type.Object({
   // CORS
   CORS_ORIGIN: Type.Array(Type.String(), {
     description: "Allowed CORS origins (comma-separated)",
-    default: ["http://localhost:3000"],
+    default: ["http://localhost:5000"],
   }),
 
   // Email (Optional - for email verification and password reset)
@@ -127,18 +127,18 @@ export function validateEnv(): Env {
   const rawCorsOrigin = process.env["CORS_ORIGIN"];
   const corsOriginArray = rawCorsOrigin
     ? rawCorsOrigin.split(",").map((origin) => origin.trim())
-    : ["http://localhost:3000"]; // Default fallback
+    : ["http://localhost:5000"]; // Default fallback
 
   const rawEnv = {
     NODE_ENV: process.env["NODE_ENV"] || "development",
-    PORT: Number(process.env["PORT"] ?? 3000),
+    PORT: Number(process.env["PORT"] ?? 5000),
     HOST: process.env["HOST"] || "0.0.0.0",
     DATABASE_URL: process.env["DATABASE_URL"],
     ENABLE_AUTH: process.env["ENABLE_AUTH"] !== "false",
     REQUIRE_EMAIL_VERIFICATION:
       process.env["REQUIRE_EMAIL_VERIFICATION"] === "true",
     BETTER_AUTH_SECRET: process.env["BETTER_AUTH_SECRET"],
-    BETTER_AUTH_URL: process.env["BETTER_AUTH_URL"] || "http://localhost:3000",
+    BETTER_AUTH_URL: process.env["BETTER_AUTH_URL"] || "http://localhost:5000",
     LOG_LEVEL: process.env["LOG_LEVEL"] || "info",
     CORS_ORIGIN: corsOriginArray,
     RESEND_API_KEY: process.env["RESEND_API_KEY"],
