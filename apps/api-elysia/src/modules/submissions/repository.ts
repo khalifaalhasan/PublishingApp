@@ -11,6 +11,36 @@ import {
 } from "@common/db/schema";
 import { and, desc, eq } from "drizzle-orm";
 
+type CreateSubmissionInput = {
+  title: string;
+  description: string;
+  type: SubmissionType;
+  isDraft: boolean;
+  fileUrl: string;
+  fileName: string;
+  sellingPoint?: string;
+  coverLetter?: string;
+  authorBio: {
+    penName?: string;
+    bio: string;
+    phone: string;
+    socialLinks?: string;
+  };
+} & (
+  | {
+      type: "BOOK";
+      bookDetail: {
+        genre: string;
+        pageCount: number;
+        language?: string;
+      };
+    }
+  | {
+      type: "ESSAY";
+      essayDetail: { topic: string; wordCount?: number };
+    }
+);
+
 export async function findSubmissions(params: {
   userId?: string;
   status?: SubmissionStatus;
@@ -70,23 +100,12 @@ export async function findSubmissionDetail(id: string, type: SubmissionType) {
   return { detail, files, history };
 }
 
-export async function insertSubmission(data: {
-  userId: string;
-  type: SubmissionType;
-  title: string;
-  description: string;
-  status: SubmissionStatus;
-  isDraft: boolean;
-  fileUrl: string;
-  fileName: string;
-  bookDetail?: {
-    genre: string;
-    pageCount: number;
-    language?: string;
-    isbn?: string;
-  };
-  essayDetail?: { topic: string; wordCount?: number };
-}) {
+export async function insertSubmission(
+  data: {
+    userId: string;
+    status: SubmissionStatus;
+  } & CreateSubmissionInput,
+) {
   return await db.transaction(async (tx) => {
     const [newSub] = await tx
       .insert(submission)
@@ -95,6 +114,9 @@ export async function insertSubmission(data: {
         type: data.type,
         title: data.title,
         description: data.description,
+        sellingPoint: data.sellingPoint,
+        coverLetter: data.coverLetter,
+        authorBio: data.authorBio,
         status: data.status,
         submittedAt: !data.isDraft ? new Date() : null,
       })
