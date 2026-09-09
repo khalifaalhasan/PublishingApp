@@ -8,7 +8,12 @@ const {
   TUNNEL_REMOTE_PORT,
 } = process.env;
 
-const required = { TUNNEL_SSH_HOST, TUNNEL_SSH_USER, TUNNEL_LOCAL_PORT, TUNNEL_REMOTE_PORT };
+const required = {
+  TUNNEL_SSH_HOST,
+  TUNNEL_SSH_USER,
+  TUNNEL_LOCAL_PORT,
+  TUNNEL_REMOTE_PORT,
+};
 for (const [key, value] of Object.entries(required)) {
   if (!value) {
     console.error(`[tunnel] missing env var: ${key} — cek .env kamu`);
@@ -17,24 +22,31 @@ for (const [key, value] of Object.entries(required)) {
 }
 
 function connect() {
-  console.log(`[tunnel] connecting to ${TUNNEL_SSH_HOST}:${TUNNEL_SSH_PORT ?? 22}...`);
+  console.log(
+    `[tunnel] connecting to ${TUNNEL_SSH_HOST}:${TUNNEL_SSH_PORT ?? 22}...`,
+  );
   const ssh = spawn(
     "ssh",
     [
       "-N",
-      "-p", TUNNEL_SSH_PORT ?? "22",
-      "-o", "ServerAliveInterval=15",
-      "-o", "ServerAliveCountMax=3",
-      "-o", "ExitOnForwardFailure=yes",
-      "-L", `${TUNNEL_LOCAL_PORT}:127.0.0.1:${TUNNEL_REMOTE_PORT}`,
+      "-p",
+      TUNNEL_SSH_PORT ?? "22",
+      "-o",
+      "ServerAliveInterval=15",
+      "-o",
+      "ServerAliveCountMax=3",
+      "-o",
+      "ExitOnForwardFailure=yes",
+      "-L",
+      `${TUNNEL_LOCAL_PORT}:127.0.0.1:${TUNNEL_REMOTE_PORT}`,
       `${TUNNEL_SSH_USER}@${TUNNEL_SSH_HOST}`,
     ],
-    { stdio: "inherit" }
+    { stdio: "inherit" },
   );
 
   ssh.on("exit", (code) => {
     console.log(`[tunnel] disconnected (code ${code}), retrying in 3s...`);
-    setTimeout(connect, 3000);
+    setTimeout(connect, 5000);
   });
 }
 
