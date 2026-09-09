@@ -20,10 +20,10 @@ RUN bun run build
 FROM base AS runner
 WORKDIR /app/apps/web
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=5000
 COPY --from=build /app/apps/web/build ./build
 COPY --from=build /app/apps/web/package.json ./package.json
 COPY --from=build /app/apps/web/node_modules ./node_modules
 
-EXPOSE 3000
+EXPOSE 5000
 CMD ["bun", "run", "build/index.js"]
