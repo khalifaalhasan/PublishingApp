@@ -1,5 +1,37 @@
 import { auth } from "@common/config/auth";
 import { Elysia } from "elysia";
+import * as schemas from "./schemas";
+
+async function handleAuthRequest(request: Request) {
+  try {
+    return await auth.handler(request);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    const code =
+      typeof error === "object" && error !== null
+        ? (error as { code?: string }).code
+        : undefined;
+
+    if (
+      code === "ERR_BODY_ALREADY_USED" ||
+      /Body is disturbed or locked/i.test(message)
+    ) {
+      return new Response(
+        JSON.stringify({
+          error: "Invalid Request Body",
+          message:
+            "Body request sudah dipakai oleh validator Elysia. Hapus schema body di route auth kalau mau Better Auth membaca raw request, atau kirim request tanpa body validation di route ini.",
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
+
+    throw error;
+  }
+}
 
 /**
  * Authentication routes powered by Better Auth.
@@ -12,10 +44,11 @@ import { Elysia } from "elysia";
 
 export const authModule = new Elysia({ prefix: "/api/auth" })
   // Sign Up with Email
-  .post("/sign-up/email", ({ request }) => auth.handler(request), {
+  .post("/sign-up/email", ({ request }) => handleAuthRequest(request), {
     detail: {
       tags: ["Auth"],
       summary: "Register with email",
+      requestBody: schemas.signUpEmailRequestBody,
       description:
         "Register a new user. Requires email, password, and name.\n\n" +
         "**Request Body (JSON):**\n" +
@@ -27,10 +60,11 @@ export const authModule = new Elysia({ prefix: "/api/auth" })
     },
   })
   // Sign In with Email
-  .post("/sign-in/email", ({ request }) => auth.handler(request), {
+  .post("/sign-in/email", ({ request }) => handleAuthRequest(request), {
     detail: {
       tags: ["Auth"],
       summary: "Login with email",
+      requestBody: schemas.signInEmailRequestBody,
       description:
         "Authenticate and start a session using email and password.\n\n" +
         "**Request Body (JSON):**\n" +
@@ -40,7 +74,7 @@ export const authModule = new Elysia({ prefix: "/api/auth" })
     },
   })
   // Sign Out
-  .post("/sign-out", ({ request }) => auth.handler(request), {
+  .post("/sign-out", ({ request }) => handleAuthRequest(request), {
     detail: {
       tags: ["Auth"],
       summary: "Logout",
@@ -49,7 +83,7 @@ export const authModule = new Elysia({ prefix: "/api/auth" })
     },
   })
   // Get Session
-  .get("/get-session", ({ request }) => auth.handler(request), {
+  .get("/get-session", ({ request }) => handleAuthRequest(request), {
     detail: {
       tags: ["Auth"],
       summary: "Get current session",
@@ -59,22 +93,28 @@ export const authModule = new Elysia({ prefix: "/api/auth" })
     },
   })
   // Request Password Reset
-  .post("/request-password-reset", ({ request }) => auth.handler(request), {
-    detail: {
-      tags: ["Auth"],
-      summary: "Request password reset",
-      description:
-        "Send a password reset link to the user’s email.\n\n" +
-        "**Request Body (JSON):**\n" +
-        "- `email` (string, required)\n" +
-        "- `redirectTo` (string, optional)",
+  .post(
+    "/request-password-reset",
+    ({ request }) => handleAuthRequest(request),
+    {
+      detail: {
+        tags: ["Auth"],
+        summary: "Request password reset",
+        requestBody: schemas.requestPasswordResetRequestBody,
+        description:
+          "Send a password reset link to the user’s email.\n\n" +
+          "**Request Body (JSON):**\n" +
+          "- `email` (string, required)\n" +
+          "- `redirectTo` (string, optional)",
+      },
     },
-  })
+  )
   // Reset Password (after clicking link in email)
-  .post("/reset-password", ({ request }) => auth.handler(request), {
+  .post("/reset-password", ({ request }) => handleAuthRequest(request), {
     detail: {
       tags: ["Auth"],
       summary: "Reset password with token",
+      requestBody: schemas.resetPasswordRequestBody,
       description:
         "Reset user password using token from email link.\n\n" +
         "**Request Body (JSON):**\n" +
@@ -83,4 +123,4 @@ export const authModule = new Elysia({ prefix: "/api/auth" })
     },
   })
   // Catch-all for other Better Auth routes
-  .all("/*", ({ request }) => auth.handler(request));
+  .all("/*", ({ request }) => handleAuthRequest(request));
