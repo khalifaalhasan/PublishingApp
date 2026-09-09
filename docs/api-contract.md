@@ -529,6 +529,14 @@ Status submission ditentukan berdasarkan nilai `isDraft`.
   "isDraft": false,
   "fileUrl": "https://storage.example.com/naskah.pdf",
   "fileName": "naskah-final.pdf",
+  "sellingPoint": "Kenapa buku ini layak terbit",
+  "coverLetter": "Surat pengantar ke editor",
+  "authorBio": {
+    "penName": "Nama Pena",
+    "bio": "Penulis dan editor lepas",
+    "phone": "08123456789",
+    "socialLinks": "https://instagram.com/penulis"
+  },
   "bookDetail": {
     "genre": "Sastra",
     "pageCount": 150,
@@ -549,6 +557,10 @@ Status submission ditentukan berdasarkan nilai `isDraft`.
   "isDraft": false,
   "fileUrl": "https://storage.example.com/essay.pdf",
   "fileName": "essay-final.pdf",
+  "authorBio": {
+    "bio": "Dosen dan peneliti teknologi pendidikan",
+    "phone": "08123456789"
+  },
   "essayDetail": {
     "topic": "Teknologi dan Pendidikan",
     "wordCount": 2500
