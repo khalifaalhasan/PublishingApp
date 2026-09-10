@@ -1,5 +1,5 @@
 {
-  "name": "web-si",
+  "name": "publishing-app",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -8,7 +8,9 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "prepare": "husky"
+    "prepare": "husky",
+    "ui:add": "bun run --filter @workspace/ui ui:add",
+    "postui:add": "bun run --filter @workspace/ui postui:add"
   },
   "devDependencies": {
     "husky": "^9.1.7",

@@ -1,5 +1,5 @@
 {
-  "name": "@web-si/api-elysia",
+  "name": "@api-elysia",
   "version": "1.0.0",
   "description": "Production-ready Elysia.js backend boilerplate with auth, database, and best practices built-in",
   "author": "Andrew",

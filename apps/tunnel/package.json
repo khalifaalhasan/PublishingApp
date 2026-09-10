@@ -1,5 +1,5 @@
 {
-  "name": "@web-si/tunnel",
+  "name": "@tunnel",
   "private": true,
   "scripts": {
     "dev": "dotenv -e ../../.env -- node scripts/tunnel.mjs"
