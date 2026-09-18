@@ -17,6 +17,30 @@ services:
       timeout: 5s
       retries: 10
 
+  minio:
+    image: quay.io/minio/minio:latest
+    ports:
+      - "10000:9000"
+      - "10001:9001"
+    command: ["server", "--console-address", ":9001", "/data"]
+    volumes:
+      - data-minio:/data
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+
+  minio-buckets:
+    image: quay.io/minio/mc:latest
+    depends_on:
+      - minio
+    restart: on-failure
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set dockerminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      /usr/bin/mc mb dockerminio/assets;
+      exit 0;
+      "
+
   # app:
   #   build:
   #     context: .
@@ -40,3 +64,4 @@ services:
 volumes:
   postgres_data:
     driver: local
+  data-minio:

@@ -15,6 +15,7 @@ import {
 import { requestLogger } from "./common/middleware/request-logger";
 import { errorHandler } from "./common/middleware/error-handler";
 import { catalogModule } from "./modules/catalog";
+import { uploadModule } from "./modules/upload";
 
 export const createApp = () => {
   const app = new Elysia()
@@ -56,7 +57,8 @@ export const createApp = () => {
     .use(healthModule)
     .use(postsModule)
     .use(submissionsModule)
-    .use(catalogModule);
+    .use(catalogModule)
+    .use(uploadModule);
 
   if (env.ENABLE_AUTH) {
     app.use(authRateLimit);

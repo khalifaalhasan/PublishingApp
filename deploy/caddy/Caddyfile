@@ -1,9 +1,15 @@
-si.radenfatah.ac.id {
+domusfox.com {
     handle /api/* {
         reverse_proxy backend:3001
     }
     handle {
-        reverse_proxy frontend:5000
+        reverse_proxy frontend:3000
+    }
+}
+
+storage.domusfox.com {
+    handle {
+        reverse_proxy minio:9000
     }
 }
 
@@ -12,6 +18,6 @@ localhost {
         reverse_proxy backend:3001
     }
     handle {
-        reverse_proxy frontend:5000
+        reverse_proxy frontend:3000
     }
 }
