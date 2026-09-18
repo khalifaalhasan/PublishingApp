@@ -7,6 +7,3 @@ export const minioClient = new Client({
   accessKey: process.env["MINIO_ROOT_USER"],
   secretKey: process.env["MINIO_ROOT_PASSWORD"],
 });
-
-console.log("USER:", JSON.stringify(process.env["MINIO_ROOT_USER"]));
-console.log("PASS:", JSON.stringify(process.env["MINIO_ROOT_PASSWORD"]));
