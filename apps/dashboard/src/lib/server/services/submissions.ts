@@ -2,7 +2,7 @@ import { env } from "$env/dynamic/private";
 import type {
   SubmissionBodySchema,
   GetSubmissionParams,
-} from "../../../types/submissions";
+} from "../../types/submissions";
 
 // Create
 export async function createSubmission(
@@ -134,4 +134,5 @@ export async function getSubmissionDetail(fetchFn: typeof fetch, id: string) {
       `Failed to fetch submission detail: ${res.status} ${res.statusText}`,
     );
   }
+  return res.json();
 }
