@@ -11,9 +11,9 @@
     "sourceMap": true,
     "strict": true,
     "moduleResolution": "bundler",
-    "paths": {
-      "@repo/ui": ["../../packages/ui/src/index.ts"]
-    },
+    // "paths": {
+    //   "@repo/ui": ["../../packages/ui/src/index.ts"]
+    // },
     "extends": "./.svelte-kit/tsconfig.json"
   }
   // Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
