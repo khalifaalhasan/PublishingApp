@@ -25,9 +25,9 @@ export interface SubmissionBodySchema {
 }
 
 export interface GetSubmissionParams {
-  userId: string;
-  status: SubmissionStatus;
-  type: SubmissionType;
+  userId?: string;
+  status?: SubmissionStatus;
+  type?: SubmissionType;
   offset: number;
   limit: number;
 }
