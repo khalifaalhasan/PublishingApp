@@ -4,7 +4,6 @@ import { cors } from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
 import { authModule } from "@modules/auth";
 import { healthModule } from "@modules/health";
-import { postsModule } from "@modules/posts";
 import { submissionsModule } from "@modules/submissions";
 import { Elysia } from "elysia";
 import { appLogger } from "./common/logger";
@@ -45,7 +44,7 @@ export const createApp = () => {
         scalarConfig: { theme: "purple" },
       }),
     )
-    .use(errorHandler) // <-- Cukup pasang plugin error handler di sini!
+    .use(errorHandler)
 
     .get("/", () => ({
       name: "Elysia Production API",
@@ -55,7 +54,6 @@ export const createApp = () => {
     }))
 
     .use(healthModule)
-    .use(postsModule)
     .use(submissionsModule)
     .use(catalogModule)
     .use(uploadModule);

@@ -10,13 +10,15 @@ export const submissionsModule = new Elysia({ prefix: "/api/submissions" })
   // GET /submissions - User gets own, Admin gets all
   .get(
     "/",
-    async ({ query, user }) => {
+    async ({ query, user, log }) => {
       const page = Number(query.page) || 1;
       const limit = Number(query.limit) || 10;
       const status = query.status as SubmissionStatus | undefined;
       const type = query.type as SubmissionType | undefined;
 
       const userId = user.role === "USER" ? user.id : undefined;
+
+      log.info(`Fetching submissions for user ${userId || "ADMIN"}`);
 
       const result = await service.getSubmissions({
         userId,
@@ -41,8 +43,9 @@ export const submissionsModule = new Elysia({ prefix: "/api/submissions" })
   // GET /submissions/:id - User gets own, Admin gets any
   .get(
     "/:id",
-    async ({ params, user, set }) => {
+    async ({ params, user, set, log }) => {
       try {
+        log.info(`Fetching submission detail ${params.id}`);
         const submission = await service.getSubmissionDetail(params.id, {
           id: user.id,
           role: user.role,
@@ -79,8 +82,9 @@ export const submissionsModule = new Elysia({ prefix: "/api/submissions" })
   // POST /submissions - Create submission
   .post(
     "/",
-    async ({ body, user, set }) => {
+    async ({ body, user, set, log }) => {
       try {
+        log.info(`Creating new submission for user ${user.id}`);
         const newSub = await service.createSubmission(user.id, body);
         set.status = 201;
         return {
@@ -105,8 +109,9 @@ export const submissionsModule = new Elysia({ prefix: "/api/submissions" })
   // PATCH /submissions/:id - Update draft
   .patch(
     "/:id",
-    async ({ params, body, user, set }) => {
+    async ({ params, body, user, set, log }) => {
       try {
+        log.info(`Updating draft submission ${params.id}`);
         await service.updateDraft(params.id, user.id, body);
         return { message: "Submission updated successfully" };
       } catch (error: any) {
@@ -130,8 +135,9 @@ export const submissionsModule = new Elysia({ prefix: "/api/submissions" })
   // POST /submissions/:id/resubmit - Resubmit revised submission
   .post(
     "/:id/resubmit",
-    async ({ params, body, user, set }) => {
+    async ({ params, body, user, set, log }) => {
       try {
+        log.info(`Resubmitting submission ${params.id}`);
         await service.resubmitSubmission(params.id, user.id, body);
         return { message: "Submission resubmitted successfully" };
       } catch (error: any) {
@@ -155,8 +161,11 @@ export const submissionsModule = new Elysia({ prefix: "/api/submissions" })
   // PATCH /submissions/:id/status - Admin update status
   .patch(
     "/:id/status",
-    async ({ params, body, user, set }) => {
+    async ({ params, body, user, set, log }) => {
       try {
+        log.info(
+          `Admin ${user.id} updating submission ${params.id} status to ${body.status}`,
+        );
         await service.updateSubmissionStatus(
           params.id,
           user.id,

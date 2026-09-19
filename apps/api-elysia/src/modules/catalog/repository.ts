@@ -132,13 +132,14 @@ export const catalogRepository = {
     submissionId: string;
     slug: string;
     publishedById: string;
+    isPublished?: boolean;
   }) {
     const result = await db
       .insert(catalogEntry)
       .values({
         submissionId: data.submissionId,
         slug: data.slug,
-        isPublished: false,
+        isPublished: data.isPublished ?? false,
         publishedById: data.publishedById,
       })
       .returning();

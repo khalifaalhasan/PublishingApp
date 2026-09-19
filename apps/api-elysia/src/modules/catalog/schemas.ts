@@ -35,3 +35,7 @@ export const getCatalogQuerySchema = t.Object({
 export const catalogSlugParamSchema = t.Object({
   slug: t.String(),
 });
+
+export const publishCatalogBodySchema = t.Object({
+  submissionId: t.String(),
+});

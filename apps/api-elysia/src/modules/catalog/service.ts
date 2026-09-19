@@ -62,6 +62,7 @@ export const catalogService = {
       submissionId,
       slug: finalSlug,
       publishedById: userId,
+      isPublished: true,
     });
 
     return {
