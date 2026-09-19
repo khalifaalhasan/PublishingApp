@@ -107,6 +107,7 @@ export const catalogRepository = {
     return result[0] || null;
   },
 
+  // for insert catalog entry, we need to find the submission title first
   async findSubmissionTitle(submissionId: string) {
     const result = await db
       .select({ title: submission.title })
