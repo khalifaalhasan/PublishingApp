@@ -1,3 +1,9 @@
+/**
+ * TODO :
+ * Add Find by title
+ * Add insert catalog entry
+ */
+
 import { Elysia } from "elysia";
 import * as service from "./service";
 import * as schemas from "./schemas";

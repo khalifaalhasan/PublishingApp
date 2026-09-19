@@ -12,6 +12,7 @@ export const uploadModule = new Elysia({ prefix: "/api/upload" }).get(
     return { url };
   },
   {
+    // TODO : Add auth middleware
     detail: {
       tags: ["Upload"],
       summary: "Get presigned URL for file",
