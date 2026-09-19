@@ -27,6 +27,7 @@ export const apiClient = async <T>(
   const response = await fetchFn(`${API_BASE_URL}${endpoint}`, {
     ...restOptions,
     headers,
+    credentials: "include",
   });
 
   const contentType = response.headers.get("content-type");

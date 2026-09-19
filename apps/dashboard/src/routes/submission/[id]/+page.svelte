@@ -1,15 +1,13 @@
 <script lang="ts">
   import type { PageData, ActionData } from './$types';
 
-  export let data: PageData;
-  export let form: ActionData;
-  
+  let { data, form }: { data: PageData; form: ActionData } = $props();
   const sub = data.submission;
 </script>
 
 <div class="container mx-auto p-4 max-w-4xl">
   <div class="mb-6">
-    <a href="/submissions" class="text-blue-500 hover:underline">&larr; Back to Submissions</a>
+    <a href="/submission" class="text-blue-500 hover:underline">&larr; Back to Submissions</a>
   </div>
   
   <div class="bg-white rounded-lg shadow-md p-8">

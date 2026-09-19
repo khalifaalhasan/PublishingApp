@@ -1,10 +1,10 @@
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getSubmissionDetail } from "$lib/server/services/submissions";
+import { submissionsService } from "$lib/server/services/submissionsService";
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
   try {
-    const data = await getSubmissionDetail(fetch, params.id);
+    const data = await submissionsService.getSubmissionDetail(params.id, fetch);
     return { submission: data.data || data };
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -36,4 +36,4 @@ export const actions = {
       return { success: false, error: errorMessage };
     }
   },
-};
+} satisfies import("./$types").Actions;

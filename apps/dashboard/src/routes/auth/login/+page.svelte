@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { ActionData } from './$types';
+    import type { ActionData } from "./$types";
 
-  export let form: ActionData;
+  let { form }: { form: ActionData } = $props();
 </script>
 
 <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
