@@ -7,8 +7,8 @@ const config = {
     adapter: adapter({
       out: "build",
     }),
-    alias: {
-      "@repo/ui": "../../packages/ui/src/lib/index.ts",
-    },
+    // alias: {
+    //   "@repo/ui": "../../packages/ui/src/lib/index.ts",
+    // },
   },
 };

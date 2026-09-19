@@ -1,6 +1,6 @@
 <script lang="ts">
 	import svelteLogo from '../assets/svelte.svg';
-	import { Button } from '@repo/ui/lib';
+	// import { Button } from '@repo/ui/lib';
 </script>
 
 <main class="flex flex-col items-center justify-center gap-2 p-4" style="height: 100vh;">
@@ -51,9 +51,6 @@
 	<p class="text-muted-foreground max-w-[750px] text-center text-lg text-balance sm:text-xl">
 		Starter code that contains a monorepo setup with Vite, SvelteKit, and shadcn-svelte.
 	</p>
-	<Button href="https://github.com/reciosonny/turbo-vite-sveltekit-shadcn-starter" target="_blank"
-		>Learn more</Button
-	>
 </main>
 
 <style>
