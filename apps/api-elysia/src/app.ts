@@ -16,16 +16,20 @@ import { errorHandler } from "./common/middleware/error-handler";
 import { catalogModule } from "./modules/catalog";
 import { uploadModule } from "./modules/upload";
 
+console.log("CORS_ORIGIN:", env.CORS_ORIGIN, Array.isArray(env.CORS_ORIGIN));
+
 export const createApp = () => {
   const app = new Elysia()
     .use(requestLogger)
     .use(globalRateLimit)
+
     .use(
       cors({
         origin: env.CORS_ORIGIN,
         credentials: true,
       }),
     )
+
     .use(
       swagger({
         path: "/docs",
