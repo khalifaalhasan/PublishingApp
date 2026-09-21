@@ -15,7 +15,6 @@ type CreateSubmissionInput = {
   title: string;
   description: string;
   type: SubmissionType;
-  isDraft: boolean;
   fileUrl: string;
   fileName: string;
   sellingPoint?: string;
@@ -118,7 +117,6 @@ export async function insertSubmission(
         coverLetter: data.coverLetter,
         authorBio: data.authorBio,
         status: data.status,
-        submittedAt: !data.isDraft ? new Date() : null,
       })
       .returning();
 
@@ -143,15 +141,6 @@ export async function insertSubmission(
       version: 1,
       uploadedById: data.userId,
     });
-
-    if (!data.isDraft) {
-      await tx.insert(submissionStatusHistory).values({
-        submissionId: newSub.id,
-        toStatus: "AWAITING_REVIEW",
-        actorId: data.userId,
-      });
-    }
-
     return newSub;
   });
 }
@@ -213,15 +202,6 @@ export async function updateDraftSubmission(
           uploadedById: userId,
         });
       }
-    }
-
-    if (data.isSubmit) {
-      await tx.insert(submissionStatusHistory).values({
-        submissionId: id,
-        fromStatus: "DRAFT",
-        toStatus: "AWAITING_REVIEW",
-        actorId: userId,
-      });
     }
   });
 }

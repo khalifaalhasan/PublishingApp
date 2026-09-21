@@ -12,7 +12,6 @@ export type CreateSubmissionInput = {
   title: string;
   description: string;
   type: SubmissionType;
-  isDraft: boolean;
   fileUrl: string;
   fileName: string;
   sellingPoint?: string;
@@ -85,7 +84,7 @@ export async function createSubmission(
   userId: string,
   data: CreateSubmissionInput,
 ) {
-  const status: SubmissionStatus = data.isDraft ? "DRAFT" : "AWAITING_REVIEW";
+  const status: SubmissionStatus = "AWAITING_REVIEW";
 
   return await repo.insertSubmission({
     userId,
@@ -116,7 +115,6 @@ export async function updateDraft(
 
   if (!sub) throw new Error("NOT_FOUND");
   if (sub.userId !== userId) throw new Error("FORBIDDEN");
-  if (sub.status !== "DRAFT") throw new Error("BAD_REQUEST_NOT_DRAFT");
 
   const updatePayload: any = {};
   if (data.title) updatePayload.title = data.title;

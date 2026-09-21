@@ -27,7 +27,6 @@ import { pgEnum, pgTable as table } from "drizzle-orm/pg-core";
 export const submissionTypeEnum = pgEnum("submission_type", ["BOOK", "ESSAY"]);
 
 export const submissionStatusEnum = pgEnum("submission_status", [
-  "DRAFT",
   "AWAITING_REVIEW",
   "IN_REVIEW",
   "ACTION_REQUIRED",
@@ -61,7 +60,7 @@ export const submission = table("submission", {
     phone: string;
     socialLinks?: string;
   }>(),
-  status: submissionStatusEnum("status").notNull().default("DRAFT"),
+  status: submissionStatusEnum("status").notNull().default("AWAITING_REVIEW"),
   currentReviewerId: t.text("current_reviewer_id").references(() => user.id, {
     onDelete: "set null",
   }),
