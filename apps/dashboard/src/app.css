@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* 1. Beritahu Tailwind untuk scan class di monorepo */
-@source "../../packages/components"; 
+@source "../../packages/components";
 
 /* 2. Kenalkan variabel ke Tailwind v4 (INI YANG MEMPERBAIKI ERROR @apply) */
 @theme {
@@ -14,7 +14,7 @@
   --color-primary-foreground: hsl(var(--primary-foreground));
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
-  
+
   /* Tambahkan radius jika shadcn kamu menggunakannya */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -35,7 +35,7 @@
     --muted-foreground: 215.4 16.3% 46.9%;
     --radius: 0.5rem;
   }
-  
+
   /* Pastikan blok @apply ini ada di bawah root */
   * {
     @apply border-border;

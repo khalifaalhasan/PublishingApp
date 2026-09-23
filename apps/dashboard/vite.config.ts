@@ -21,7 +21,10 @@ export default defineConfig({
     {
       name: "resolve-components-lib",
       resolveId(id, importer) {
-        if (id.startsWith("$lib/") && importer?.includes("packages/components")) {
+        if (
+          id.startsWith("$lib/") &&
+          importer?.includes("packages/components")
+        ) {
           return path.resolve(componentsLib, id.replace("$lib/", ""));
         }
         if (id === "$lib" && importer?.includes("packages/components")) {
