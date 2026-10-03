@@ -14,7 +14,7 @@ import {
   Label,
 } from "@repo/ui";
 import { AuthBrand, ErrorBanner, PasswordField } from "./auth-shared";
-import { authClient } from "@/lib/auth-cleint";
+import { authClient } from "@/lib/auth-client";
 
 export function LoginForm() {
   const router = useRouter();
