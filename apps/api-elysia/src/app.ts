@@ -22,7 +22,6 @@ export const createApp = () => {
   const app = new Elysia()
     .use(requestLogger)
     .use(globalRateLimit)
-
     .use(
       cors({
         origin: env.CORS_ORIGIN,

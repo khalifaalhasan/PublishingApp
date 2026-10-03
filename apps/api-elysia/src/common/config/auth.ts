@@ -9,6 +9,7 @@ import { env } from "./env";
  * Defines authentication methods, session behavior, and database integration
  * Review security defaults before production deployment
  */
+console.log("[auth] trustedOrigins:", env.CORS_ORIGIN);
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",

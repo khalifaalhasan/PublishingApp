@@ -16,7 +16,7 @@ export const uploadModule = withAuth(new Elysia({ prefix: "/api/upload" })).get(
     return { url };
   },
   {
-    auth: ["ADMIN"],
+    auth: ["ADMIN", "USER"],
     detail: {
       tags: ["Upload"],
       summary: "Get presigned URL for file",

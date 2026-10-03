@@ -104,8 +104,8 @@ async function seed() {
       // Create Submissions & details
       appLogger.info("[SEED] Creating Submissions & Details...");
 
-      // 1. DRAFT Book Submission
-      const [bookDraft] = await db
+      // 1. Book Submission
+      const [bookPending] = await db
         .insert(submission)
         .values({
           userId: author1.id,
@@ -113,12 +113,12 @@ async function seed() {
           title: "Panduan Menjadi Developer Handal",
           description:
             "Buku ini membahas langkah-langkah menjadi developer handal menggunakan Elysia.js dan SvelteKit.",
-          status: "DRAFT",
+          status: "AWAITING_REVIEW",
         })
         .returning();
 
       await db.insert(bookDetail).values({
-        submissionId: bookDraft.id,
+        submissionId: bookPending.id,
         genre: "Teknologi",
         pageCount: 150,
         language: "Indonesia",
@@ -148,7 +148,7 @@ async function seed() {
 
       await db.insert(submissionStatusHistory).values({
         submissionId: bookApproved.id,
-        fromStatus: "DRAFT",
+        fromStatus: "AWAITING_REVIEW",
         toStatus: "APPROVED",
         actorId: admin.id,
         note: "Naskah yang sangat baik dan siap untuk diterbitkan.",
