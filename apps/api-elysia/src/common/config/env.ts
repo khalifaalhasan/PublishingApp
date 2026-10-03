@@ -25,7 +25,22 @@ const EnvSchema = Type.Object({
   HOST: Type.String({
     default: "0.0.0.0",
   }),
-
+  // Minio
+  MINIO_ENDPOINT: Type.String({
+    default: "localhost",
+  }),
+  MINIO_PORT: Type.Number({
+    default: 8333,
+  }),
+  MINIO_USE_SSL: Type.Boolean({
+    default: false,
+  }),
+  ACCESS_KEY: Type.String({
+    default: "admin",
+  }),
+  SECRET_KEY: Type.String({
+    default: "admin123",
+  }),
   // Database
   DATABASE_URL: Type.String({
     description: "PostgreSQL connection string",
@@ -75,7 +90,7 @@ const EnvSchema = Type.Object({
   // CORS
   CORS_ORIGIN: Type.Array(Type.String(), {
     description: "Allowed CORS origins (comma-separated)",
-    default: ["http://localhost:5000"],
+    default: ["http://localhost:5000", "http://localhost:3000"],
   }),
 
   // Email (Optional - for email verification and password reset)
@@ -126,10 +141,19 @@ export type Env = Static<typeof EnvSchema>;
 export function validateEnv(): Env {
   const rawCorsOrigin = process.env["CORS_ORIGIN"];
   const corsOriginArray = rawCorsOrigin
-    ? rawCorsOrigin.split(",").map((origin) => origin.trim())
-    : ["http://localhost:5000"]; // Default fallback
+    ? rawCorsOrigin
+        .replace(/^\[|\]$/g, "") // buang [ ] di awal/akhir
+        .split(",")
+        .map((o) => o.trim().replace(/^["']|["']$/g, "")) // buang kutip
+        .filter(Boolean)
+    : ["http://localhost:5000", "http://localhost:3000"];
 
   const rawEnv = {
+    MINIO_ENDPOINT: process.env["MINIO_ENDPOINT"] || "localhost",
+    MINIO_PORT: Number(process.env["MINIO_PORT"] ?? 8333),
+    MINIO_USE_SSL: process.env["MINIO_USE_SSL"] === "true" || false,
+    ACCESS_KEY: process.env["ACCESS_KEY"] || "admin",
+    SECRET_KEY: process.env["SECRET_KEY"] || "admin123",
     NODE_ENV: process.env["NODE_ENV"] || "development",
     PORT: Number(process.env["PORT"] ?? 5000),
     HOST: process.env["HOST"] || "0.0.0.0",

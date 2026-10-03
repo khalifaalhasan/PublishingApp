@@ -17,27 +17,35 @@ services:
       timeout: 5s
       retries: 10
 
-  minio:
-    image: quay.io/minio/minio:latest
+  elysia-s3:
+    image: docker.io/chrislusf/seaweedfs:3.65 # Pin ke versi 3.65 (atau cek tag terbaru di Docker Hub)
+    container_name: elysia-s3
+    command: "server -dir=/data -s3 -s3.config=/etc/seaweedfs/s3.json -s3.port=8333"
     ports:
-      - "10000:9000"
-      - "10001:9001"
-    command: ["server", "--console-address", ":9001", "/data"]
+      - "8333:8333"
     volumes:
-      - data-minio:/data
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      - seaweed-data:/data
+      - ./s3.json:/etc/seaweedfs/s3.json:ro,Z
+    restart: unless-stopped
 
-  minio-buckets:
-    image: quay.io/minio/mc:latest
+  # 2. Service "Pekerja Sementara" untuk membuat bucket
+  s3-init:
+    image: amazon/aws-cli:latest
+    container_name: s3-init
     depends_on:
-      - minio
-    restart: on-failure
+      - elysia-s3
+    environment:
+      # Masukkan kredensial S3 kamu di sini
+      - AWS_ACCESS_KEY_ID=${ACCESS_KEY:-admin}
+      - AWS_SECRET_ACCESS_KEY=${SECRET_KEY:-admin123}
+      - AWS_DEFAULT_REGION=us-east-1 # Wajib ada untuk S3, biarkan us-east-1
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc alias set dockerminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
-      /usr/bin/mc mb dockerminio/assets;
+      echo 'Menunggu SeaweedFS S3 siap...';
+      sleep 5;
+      echo 'Mencoba membuat bucket...';
+      aws s3 mb s3://assets --endpoint-url http://elysia-s3:8333 || true;
+      echo 'Selesai!';
       exit 0;
       "
 
@@ -64,4 +72,5 @@ services:
 volumes:
   postgres_data:
     driver: local
-  data-minio:
+  seaweed-data:
+    driver: local
