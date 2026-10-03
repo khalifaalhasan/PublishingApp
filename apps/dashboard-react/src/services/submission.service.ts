@@ -55,20 +55,40 @@ export async function getSubmissions(
  * @throws {ApiRequestError} 403 jika bukan pemilik submission
  * @throws {ApiRequestError} 404 jika submission tidak ditemukan
  */
+
 export async function getSubmissionDetail(
   id: string,
 ): Promise<SubmissionDetail> {
-  return apiFetch<SubmissionDetail>(`/submissions/${id}`, {
-    noCache: true,
-  });
+  const endpoint = `/submissions/${id}`;
+  try {
+    // Definisikan tipe wrapper respons dari backend yang membungkus di dalam properti 'data'
+    const response = await apiFetch<{ data: SubmissionDetail }>(endpoint, {
+      noCache: true,
+    });
+
+    console.log(
+      `[DEBUG] Raw API Response from ${endpoint}:`,
+      JSON.stringify(response, null, 2),
+    );
+
+    // Ambil langsung objek di dalam properti 'data'
+    const detailData = response?.data
+      ? response.data
+      : (response as unknown as SubmissionDetail);
+
+    return detailData;
+  } catch (error) {
+    console.error(
+      `[DEBUG ERROR] Failed to fetch submission detail for ID: "${id}"`,
+      error,
+    );
+    throw error;
+  }
 }
 
 /**
  * POST /submissions/:id/resubmit
  * Mengirim ulang revisi naskah setelah mendapat feedback ACTION_REQUIRED.
- *
- * @throws {ApiRequestError} 400 jika status bukan ACTION_REQUIRED
- * @throws {ApiRequestError} 403 jika bukan pemilik submission
  */
 export async function resubmitSubmission(
   id: string,
@@ -78,7 +98,10 @@ export async function resubmitSubmission(
     note?: string;
   },
 ): Promise<void> {
-  return apiFetch<void>(`/submissions/${id}/resubmit`, {
+  const endpoint = `/submissions/${id}/resubmit`;
+  console.log(`[DEBUG] POST ${endpoint} with payload:`, payload);
+
+  return apiFetch<void>(endpoint, {
     method: "POST",
     body: payload,
     noCache: true,

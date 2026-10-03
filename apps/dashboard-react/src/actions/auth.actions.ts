@@ -33,12 +33,6 @@ async function forwardSetCookies(res: Response) {
 }
 
 export async function loginAction(formData: FormData) {
-  console.log(
-    "[login] status:",
-    res.status,
-    "| set-cookie:",
-    res.headers.getSetCookie(),
-  );
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
 

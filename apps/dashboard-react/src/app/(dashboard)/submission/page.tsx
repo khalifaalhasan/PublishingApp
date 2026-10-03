@@ -9,7 +9,7 @@ import type {
   User,
 } from "@/types/api";
 
-export default async function DashboardRoot() {
+export default async function SubmissionsPage() {
   let user: User | null = null;
   let submissions: PaginatedResponse<Submission> | null = null;
   let notifications: Notification[] = [];

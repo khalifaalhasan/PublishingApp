@@ -42,7 +42,7 @@ export default async function EditSubmissionPage({
 
   return (
     <div className="flex-1 bg-white text-neutral-900">
-      <div className="mx-auto w-full max-w-2xl px-4 py-8 md:px-8 md:py-10">
+      <div className="w-full px-4 py-8 md:px-8 md:py-10">
         <Link
           href={`/submission/${id}`}
           className="text-sm text-neutral-500 underline-offset-4 hover:text-neutral-900 hover:underline"

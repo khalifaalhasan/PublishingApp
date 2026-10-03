@@ -31,7 +31,7 @@ export const submissionsModule = new Elysia({ prefix: "/api/submissions" })
       return result;
     },
     {
-      auth: ["ADMIN"],
+      auth: ["ADMIN", "USER"],
       query: schemas.getSubmissionsQuerySchema,
       detail: {
         tags: ["Submissions"],

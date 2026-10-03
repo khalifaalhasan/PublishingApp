@@ -41,7 +41,44 @@ export interface Submission {
   updatedAt: string;
 }
 
-export interface SubmissionDetail extends Submission {
+export interface SubmissionFile {
+  id: string;
+  submissionId: string;
+  fileUrl: string;
+  fileName: string;
+  version: number;
+  uploadedById: string;
+  uploadedAt: string;
+}
+
+export interface SubmissionSpecificDetail {
+  id: string;
+  submissionId: string;
+  genre?: string;
+  pageCount?: number;
+  language?: string;
+  isbn?: string | null;
+  topic?: string;
+  wordCount?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface StatusHistoryEntry {
+  id: string;
+  status: SubmissionStatus;
+  note?: string;
+  changedAt: string;
+  changedBy?: string;
+}
+
+export interface SubmissionDetail {
+  id: string;
+  userId: string;
+  title: string;
+  description: string;
+  type: SubmissionType;
+  status: SubmissionStatus;
   sellingPoint?: string;
   coverLetter?: string;
   authorBio?: {
@@ -50,16 +87,12 @@ export interface SubmissionDetail extends Submission {
     phone?: string;
     socialLinks?: string;
   };
-  bookDetail?: {
-    genre?: string;
-    pageCount?: number;
-    language?: string;
-  };
-  essayDetail?: {
-    topic?: string;
-    wordCount?: number;
-  };
-  statusHistory?: StatusHistoryEntry[];
+  // Sesuai dengan respons JSON terbaru Anda:
+  detail?: SubmissionSpecificDetail;
+  files?: SubmissionFile[];
+  history?: StatusHistoryEntry[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface StatusHistoryEntry {
