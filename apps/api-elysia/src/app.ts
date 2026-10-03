@@ -62,7 +62,7 @@ export const createApp = () => {
     .use(uploadModule);
 
   if (env.ENABLE_AUTH) {
-    app.use(authRateLimit);
+    // app.use(authRateLimit);
     app.use(authModule);
     appLogger.info("[AUTH] Authentication module enabled");
   } else {
