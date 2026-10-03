@@ -1,3 +1,3 @@
-ALTER TABLE "submission" ADD COLUMN "selling_point" text;--> statement-breakpoint
-ALTER TABLE "submission" ADD COLUMN "cover_letter" text;--> statement-breakpoint
-ALTER TABLE "submission" ADD COLUMN "author_bio" jsonb;
+ALTER TABLE "submission" ADD COLUMN IF NOT EXISTS "selling_point" text;
+ALTER TABLE "submission" ADD COLUMN IF NOT EXISTS "cover_letter" text;--> statement-breakpoint
+ALTER TABLE "submission" ADD COLUMN IF NOT EXISTS "author_bio" jsonb;
