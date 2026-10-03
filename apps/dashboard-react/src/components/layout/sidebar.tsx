@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 import type { User } from "@/types/api";
-
-// ─────────────────────────────────────────────────────────────
-// Nav items
-// ─────────────────────────────────────────────────────────────
 
 const navItems = [
   {
@@ -20,6 +17,7 @@ const navItems = [
         strokeWidth={1.5}
         stroke="currentColor"
         className="size-[18px]"
+        aria-hidden="true"
       >
         <path
           strokeLinecap="round"
@@ -40,6 +38,7 @@ const navItems = [
         strokeWidth={1.5}
         stroke="currentColor"
         className="size-[18px]"
+        aria-hidden="true"
       >
         <path
           strokeLinecap="round"
@@ -51,19 +50,23 @@ const navItems = [
   },
 ];
 
-// ─────────────────────────────────────────────────────────────
-// Component — CLIENT (butuh usePathname)
-// User prop dikirim dari Server Component (layout)
-// ─────────────────────────────────────────────────────────────
-
 interface SidebarProps {
   user: User | null;
+  /** Status drawer. Hanya berpengaruh di mobile. */
+  open: boolean;
+  isMobile: boolean;
+  onClose: () => void;
 }
 
-export function Sidebar({ user }: SidebarProps) {
+export function Sidebar({ user, open, isMobile, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const closeRef = useRef<HTMLButtonElement>(null);
 
-  // Ambil inisial dari nama user untuk avatar
+  // Saat drawer terbuka di mobile, pindahkan fokus ke tombol tutup
+  useEffect(() => {
+    if (open && isMobile) closeRef.current?.focus();
+  }, [open, isMobile]);
+
   const initials = user?.name
     ? user.name
         .split(" ")
@@ -74,9 +77,17 @@ export function Sidebar({ user }: SidebarProps) {
     : "?";
 
   return (
-    <aside className="flex h-full w-60 shrink-0 flex-col border-r border-border bg-sidebar">
+    <aside
+      id="app-sidebar"
+      aria-label="Navigasi utama"
+      // drawer yang tertutup tidak boleh bisa difokus lewat keyboard
+      inert={isMobile && !open}
+      className={`fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col border-r border-border bg-sidebar shadow-xl transition-transform duration-200 ease-out motion-reduce:transition-none md:static md:z-auto md:h-full md:w-60 md:max-w-none md:shrink-0 md:translate-x-0 md:shadow-none ${
+        open ? "translate-x-0" : "-translate-x-full"
+      }`}
+    >
       {/* Brand */}
-      <div className="flex h-14 items-center border-b border-border px-5">
+      <div className="flex h-14 shrink-0 items-center justify-between border-b border-border px-5">
         <div className="flex items-center gap-2.5">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
             <svg
@@ -86,6 +97,7 @@ export function Sidebar({ user }: SidebarProps) {
               strokeWidth={2}
               stroke="currentColor"
               className="size-4 text-primary-foreground"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -98,10 +110,34 @@ export function Sidebar({ user }: SidebarProps) {
             Penerbit Nusantara
           </span>
         </div>
+
+        <button
+          ref={closeRef}
+          type="button"
+          onClick={onClose}
+          aria-label="Tutup menu"
+          className="-mr-2 flex size-10 items-center justify-center rounded-md text-muted-foreground hover:bg-sidebar-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.8}
+            stroke="currentColor"
+            className="size-5"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18 18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex flex-1 flex-col gap-0.5 p-3">
+      {/* Navigasi */}
+      <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto p-3">
         <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
           Menu
         </p>
@@ -115,7 +151,9 @@ export function Sidebar({ user }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-md px-2.5 py-2 text-sm font-medium transition-colors ${
+              onClick={onClose} // tutup drawer juga saat link menuju halaman yang sama
+              aria-current={isActive ? "page" : undefined}
+              className={`flex items-center gap-3 rounded-md px-2.5 py-2.5 text-sm font-medium transition-colors md:py-2 ${
                 isActive
                   ? "bg-sidebar-primary text-sidebar-primary-foreground"
                   : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
@@ -128,8 +166,8 @@ export function Sidebar({ user }: SidebarProps) {
         })}
       </nav>
 
-      {/* User Footer — data dari server */}
-      <div className="border-t border-border p-3">
+      {/* User */}
+      <div className="shrink-0 border-t border-border p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <div className="flex items-center gap-3 rounded-md px-2.5 py-2">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-semibold text-muted-foreground">
             {initials}

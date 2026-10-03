@@ -1,7 +1,7 @@
 // SERVER COMPONENT — fetch user di sini, jangan tambah "use client"
 import type { Metadata } from "next";
-import { Sidebar } from "@/components/layout/sidebar";
 import { getMe } from "@/services/auth.service";
+import { AppShell } from "@/components/layout/app-shell";
 
 export const metadata: Metadata = {
   title: "Portal Penulis — Dashboard",
@@ -25,7 +25,7 @@ export default async function DashboardLayout({
   return (
     <div className="flex h-full">
       {/* Sidebar menerima user sebagai prop (Client Component) */}
-      <Sidebar user={user} />
+      <AppShell user={user}>{children}</AppShell>
       <main className="flex flex-1 flex-col overflow-y-auto bg-background">
         {children}
       </main>

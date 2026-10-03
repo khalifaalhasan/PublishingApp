@@ -15,9 +15,8 @@ export default async function DashboardRoot() {
   let notifications: Notification[] = [];
 
   try {
-    // Jalankan fetch secara paralel agar lebih cepat
     const [userData, submissionsData, notificationsData] = await Promise.all([
-      getMe().catch(() => null), // Jika gagal (misal tidak login), biarkan null
+      getMe().catch(() => null),
       getSubmissions({ limit: 10 }).catch(() => null),
       getNotifications().catch(() => [] as Notification[]),
     ]);
